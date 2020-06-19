@@ -1,0 +1,171 @@
+
+
+*{
+    padding:0;
+    border:0;
+    margin:0;
+}
+
+
+$tick-size: 150px;
+$tick-color: green;
+$tick-background: #FFFFFF;
+$tick-weight:4px;
+$tick-delay: 1000ms;
+$tick-duration: 600ms;
+$tick-rotation-offset: -100deg;//-260deg;
+$tick-rotation: 155deg;//315deg;
+
+@mixin semi-circle($cover:false){
+    $color: $tick-color;
+    $weight: $tick-weight;
+    $padding: 1px;
+    @if $cover{
+        $color: $tick-background;
+        $weight: $tick-weight + 2px;
+        $padding:0;
+    }
+    & > span{
+        position: relative;
+        width: $tick-size/2;
+        height: $tick-size;
+        margin-left:$tick-size/2;
+        overflow: hidden;
+        & > span{
+            position: absolute;
+            left:(-$tick-size/2)-$padding; right:$padding;
+            top:$padding; bottom:$padding;
+            border-radius: $tick-size;
+            border: $weight solid $color;
+        }
+    }
+}
+
+div.tick-animation{
+    position: relative;
+    width: $tick-size;
+    height: $tick-size;
+    overflow: hidden;
+    span{
+        display: block;
+    }
+    & > div{
+        position: absolute;
+        left:0; right:0;
+        top:0; bottom:0;
+        animation-fill-mode: forwards;
+        animation-duration: $tick-duration * 0.75;
+        animation-delay: $tick-delay;
+        animation-timing-function: linear;
+    }
+    div:nth-child(1){
+        @include semi-circle(); 
+        opacity: 0;
+        animation-name: tick-1;
+    }
+    div:nth-child(2){
+        @include semi-circle($cover: true);        
+        transform: rotate(-180deg);
+        animation-name: tick-cover;
+    }
+    div:nth-child(3){
+        @include semi-circle();        
+        opacity: 0;
+        animation-name: tick-2;
+    }
+    div:nth-child(4){
+        animation-delay: $tick-delay + ($tick-duration * 0.25);
+        animation-name: tick-b;
+        animation-timing-function: ease-out;
+        background-color: $tick-background;
+        height: $tick-weight*3;
+        width: 0;
+        transform: rotate(-45deg);
+        left:$tick-size*0.3;
+        top:$tick-size*0.4;
+        span{
+            display: block;
+            height: $tick-weight;
+            background-color: $tick-color;
+            margin-top: $tick-weight;
+            margin-left: $tick-weight;
+        }
+    }
+    div:nth-child(5){
+        animation-delay: $tick-delay + ($tick-duration * 0.25);
+        animation-timing-function: ease-in;
+        animation-name: tick-a;
+        background-color: $tick-color;
+        width:0;
+        height: $tick-weight;
+        transform: rotate(45deg);
+    }
+}
+
+@keyframes tick-1{
+    0%{
+        transform: rotate(-180deg + $tick-rotation-offset);
+        opacity: 1;
+    }
+    50%{
+        transform: rotate(0deg + ($tick-rotation/2) + $tick-rotation-offset);
+    }
+    100%{
+        transform: rotate(0deg + $tick-rotation + $tick-rotation-offset);
+        opacity: 1;
+    }
+}
+@keyframes tick-2{
+    49%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+        transform: rotate(0deg + ($tick-rotation/2) + $tick-rotation-offset);
+    }
+    100%{
+        opacity: 1;
+        transform: rotate(180deg + $tick-rotation + $tick-rotation-offset);
+    }
+}
+@keyframes tick-cover{
+    0%{
+        transform: rotate(-180deg + $tick-rotation-offset);
+    }
+    99%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(-180deg + $tick-rotation + $tick-rotation-offset);
+    }
+}
+@keyframes tick-a{
+    0%{
+        left:($tick-size*0.24) + ($tick-weight*1.4);
+        top:($tick-size*0.51) + ($tick-weight*0.29);
+    }
+    33%{
+        width: $tick-size*0.25;
+        left:($tick-size*0.204) + ($tick-weight*1.4);
+        top:($tick-size*0.595) + ($tick-weight*0.29);
+    }
+    100%{
+        width: $tick-size*0.25;
+        left:($tick-size*0.204) + ($tick-weight*1.4);
+        top:($tick-size*0.595) + ($tick-weight*0.29);
+    }
+}
+@keyframes tick-b{
+    0%{
+        width: 0;
+    }
+    33%{
+        width: 0;
+        left:$tick-size*0.42;
+        top:$tick-size*0.68;
+    }
+    100%{
+        width: $tick-size*0.8;
+    }
+}
