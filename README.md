@@ -1,3 +1,3 @@
 # TickAnimation
 
-CSS Tick Animation without GSAP
+Pure CSS Tick Animation without any animation libraries
